@@ -20,6 +20,8 @@ export default function Profile() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
+  const isAdmin = user?.user_metadata.role === "admin";
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setUser(undefined);
@@ -41,14 +43,17 @@ export default function Profile() {
             <p className="text-sm">{user?.user_metadata.user_name}</p>
             <p className="text-sm text-gray-500">{user?.user_metadata.email}</p>
           </div>
-          <Link href="/dashboard">
-            <Button
-              variant="ghost"
-              className="w-full flex justify-between items-center"
-            >
-              Dashboard <DashboardIcon />
-            </Button>
-          </Link>
+
+          {isAdmin && (
+            <Link href="/dashboard">
+              <Button
+                variant="ghost"
+                className="w-full flex justify-between items-center"
+              >
+                Dashboard <DashboardIcon />
+              </Button>
+            </Link>
+          )}
           <Button
             variant="ghost"
             className="w-full flex justify-between items-center"
