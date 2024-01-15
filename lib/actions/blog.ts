@@ -81,13 +81,13 @@ export async function readBlogContent(blogId: string) {
     .single();
 }
 
-// export async function updateBlogById(blogId: string, data: IBlog) {
-//   const supabase = await createSupabaseServerClient();
-//   const result = await supabase.from("blog").update(data).eq("id", blogId);
-//   revalidatePath(DASHBOARD);
-//   revalidatePath("/blog/" + blogId);
-//   return JSON.stringify(result);
-// }
+export async function updateBlogById(blogId: string, data: BlogFormSchemaType) {
+  const supabase = await createSupabaseServerClient();
+  const result = await supabase.from("blog").update(data).eq("id", blogId);
+  revalidatePath(DASHBOARD);
+  revalidatePath("/blog/" + blogId);
+  return JSON.stringify(result);
+}
 
 export async function updateBlogDetail(
   blogId: string,
