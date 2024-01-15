@@ -46,7 +46,7 @@ export default async function BlogTable() {
 const Actions = ({ id }: { id: string }) => {
   return (
     <div className="flex items-center gap-2">
-      <Link href={`/blog/`}>
+      <Link href={"/blog/" + id}>
         <Button className="flex gap-2 items-center" variant="outline">
           <EyeOpenIcon />
           View
