@@ -1,19 +1,20 @@
 import Image from "next/image";
 import { IBlog } from "@/lib/types";
 import Content from "./components/Content";
+import { SITE_URL } from "@/shared/utils/constants";
 // import Content from "./components/Content";
 
 export async function generateStaticParams() {
-  const { data: blogs } = await fetch(
-    process.env.SITE_URL + "/api/blog?id=*"
-  ).then((res) => res.json());
+  const { data: blogs } = await fetch(SITE_URL + "/api/blog?id=*").then((res) =>
+    res.json()
+  );
 
   return blogs;
 }
 
 export default async function page({ params }: { params: { id: string } }) {
   const { data: blog } = (await fetch(
-    process.env.SITE_URL + "/api/blog?id=" + params.id
+    SITE_URL + "/api/blog?id=" + params.id
   ).then((res) => res.json())) as { data: IBlog };
 
   if (!blog?.id) {

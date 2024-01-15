@@ -1,10 +1,14 @@
 import { Database } from "@/lib/types/supabase";
+import {
+  NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SUPABASE_URL,
+} from "@/shared/utils/constants";
 import { createClient } from "@supabase/supabase-js";
 
 export async function GET(request: Request) {
-  const supabase = await createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  const supabase = createClient<Database>(
+    NEXT_PUBLIC_SUPABASE_URL!,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
   const { searchParams } = new URL(request.url);

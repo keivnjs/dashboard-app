@@ -3,12 +3,17 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { Database } from "@/lib/types/supabase";
 import { createClient } from "@supabase/supabase-js";
+import {
+  NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SUPABASE_URL,
+  SERVICE_ROLE,
+} from "@/shared/utils/constants";
 
 export async function createSupabaseServerClient() {
   const cookieStore = cookies();
   return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    NEXT_PUBLIC_SUPABASE_URL!,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         get(name: string) {
@@ -20,16 +25,12 @@ export async function createSupabaseServerClient() {
 }
 
 export async function createSupbaseAdmin() {
-  return createClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SERVICE_ROLE!,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    }
-  );
+  return createClient<Database>(NEXT_PUBLIC_SUPABASE_URL!, SERVICE_ROLE!, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
 }
 
 export async function fetchCacheSupabase(query: string) {
@@ -47,15 +48,12 @@ export async function fetchCacheSupabase(query: string) {
     };
   }
 
-  const res = await fetch(
-    process.env.NEXT_PUBLIC_SUPABASE_URL! + "/rest/v1/" + query,
-    {
-      headers: {
-        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-        ...headers,
-      },
-      cache: "force-cache",
-    }
-  );
+  const res = await fetch(NEXT_PUBLIC_SUPABASE_URL! + "/rest/v1/" + query, {
+    headers: {
+      apikey: NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      ...headers,
+    },
+    cache: "force-cache",
+  });
   return await res.json();
 }

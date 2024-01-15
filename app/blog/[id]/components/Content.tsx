@@ -4,6 +4,10 @@ import { Database } from "@/lib/types/supabase";
 import { createBrowserClient } from "@supabase/ssr";
 import React, { useEffect, useState, useTransition } from "react";
 import { BlogContentLoading } from "./Skeleton";
+import {
+  NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SUPABASE_URL,
+} from "@/shared/utils/constants";
 
 export default function Content({ blogId }: { blogId: string }) {
   const [loading, setLoading] = useState(true);
@@ -15,8 +19,8 @@ export default function Content({ blogId }: { blogId: string }) {
   } | null>();
 
   const supabase = createBrowserClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    NEXT_PUBLIC_SUPABASE_URL!,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
 
   const readBlogContent = async () => {
