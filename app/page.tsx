@@ -1,43 +1,46 @@
-"use client";
+import Link from "next/link";
+import React from "react";
+import Image from "next/image";
+import { readBlog } from "@/lib/actions/blog";
 
-import { useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import { createClient } from "@supabase/supabase-js";
+export default async function Home() {
+  let { data: blogs } = await readBlog();
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-const Home: React.FC = () => {
-  const [content, setContent] = useState("");
-
-  const handleContentChange = (newContent: string) => {
-    setContent(newContent);
-  };
-
-  const handleSave = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("projects")
-        .insert([{ content }]);
-      if (error) {
-        throw error;
-      }
-      console.log("Post saved:", data);
-      // Optionally, you can redirect the user to a different page after successful save
-    } catch (error) {
-      console.error("Error saving post:", error);
-    }
-  };
+  if (!blogs?.length) {
+    blogs = [];
+  }
 
   return (
-    <div>
-      <h1>Create a New Blog Post</h1>
-      <ReactQuill theme="snow" value={content} onChange={handleContentChange} />
-      <button onClick={handleSave}>Save Post</button>
+    <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-5 p-5 xl:p-0">
+      {blogs.map((blog, index) => {
+        return (
+          <Link
+            href={"/blog/" + blog.id}
+            className="w-full  border rounded-md dark:bg-graident-dark p-5 hover:ring-2 ring-green-500 transition-all cursor-pointer space-y-5 first:lg:col-span-2 first:md:col-span-3"
+            key={index}
+          >
+            <div className="w-full h-72 sm:w-full  md:h-64 xl:h-96  relative">
+              <Image
+                priority
+                src={blog.image_url}
+                alt="cover"
+                fill
+                className=" rounded-md object-cover object-center"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm dark:text-gray-400">
+                {new Date(blog.created_at).toDateString()}
+              </p>
+
+              <h1 className="text-xl font-bold dark:text-gray-300">
+                {blog.title}
+              </h1>
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
-};
-
-export default Home;
+}
