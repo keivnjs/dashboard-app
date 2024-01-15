@@ -5,6 +5,10 @@ import { Button } from "../ui/button";
 import { SiGithub } from "react-icons/si";
 import { usePathname } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
+import {
+  NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SUPABASE_URL,
+} from "@/shared/utils/constants";
 
 export default function LoginForm() {
   const pathname = usePathname();
