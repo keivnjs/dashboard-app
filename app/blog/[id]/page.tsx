@@ -18,8 +18,9 @@ const supabase = createClient<Database>(
 
 export async function generateStaticParams() {
   const result = await supabase.from("blog").select("id").limit(10);
+  const data = result.data || [];
 
-  return result.data;
+  return data.map((item) => ({ params: { id: item.id } }));
 }
 
 export default async function page({ params }: { params: { id: string } }) {
