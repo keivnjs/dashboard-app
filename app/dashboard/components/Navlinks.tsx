@@ -13,12 +13,6 @@ export default function NavLinks() {
       Icon: ReaderIcon,
       text: "dashboard",
     },
-
-    {
-      href: "/dashboard/user",
-      Icon: PersonIcon,
-      text: "users",
-    },
   ];
 
   return (
