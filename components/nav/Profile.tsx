@@ -5,6 +5,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Portal,
 } from "@radix-ui/react-popover";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -30,6 +31,7 @@ export default function Profile() {
     await supabase.auth.signOut();
     setUser(undefined);
   };
+
   return (
     <Popover>
       <PopoverTrigger>
@@ -41,32 +43,39 @@ export default function Profile() {
           className="rounded-full ring-2 ring-orange-500"
         />
       </PopoverTrigger>
-      <PopoverContent>
-        <PopoverContent className="space-y-3 divide-y p-2" side="bottom">
-          <div className="px-4">
-            <p className="text-sm">{user?.user_metadata.user_name}</p>
-            <p className="text-sm text-gray-500">{user?.user_metadata.email}</p>
-          </div>
-
-          {isAdmin && (
-            <Link href="/dashboard">
-              <Button
-                variant="ghost"
-                className="w-full flex justify-between items-center"
-              >
-                Dashboard <DashboardIcon />
-              </Button>
-            </Link>
-          )}
-          <Button
-            variant="ghost"
-            className="w-full flex justify-between items-center"
-            onClick={handleLogout}
+      <Portal>
+        <PopoverContent>
+          <PopoverContent
+            className="space-y-3 divide-y p-2 border bg-slate-700 mt-2"
+            side="bottom"
           >
-            Log out <LockOpen1Icon />
-          </Button>
+            <div className="px-4 pb-2">
+              <p className="text-sm">{user?.user_metadata.user_name}</p>
+              <p className="text-sm text-gray-500">
+                {user?.user_metadata.email}
+              </p>
+            </div>
+
+            {isAdmin && (
+              <Link href="/dashboard">
+                <Button
+                  variant="ghost"
+                  className="w-full flex justify-between items-center"
+                >
+                  Dashboard <DashboardIcon />
+                </Button>
+              </Link>
+            )}
+            <Button
+              variant="ghost"
+              className="w-full flex justify-between items-center"
+              onClick={handleLogout}
+            >
+              Log out <LockOpen1Icon />
+            </Button>
+          </PopoverContent>
         </PopoverContent>
-      </PopoverContent>
+      </Portal>
     </Popover>
   );
 }
