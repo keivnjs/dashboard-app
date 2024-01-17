@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import MarkdownPreview from "@/components/markdown/MarkdownPreview";
 import { BlogFormSchema, BlogFormSchemaType } from "../schema";
 import { IBlogDetail } from "@/lib/types";
+import { Editor } from "novel";
 
 export default function BlogForm({
   onHandleSubmit,
@@ -204,7 +205,7 @@ export default function BlogForm({
                     isPreview ? "divide-x-0" : "divide-x h-70vh"
                   )}
                 >
-                  <Textarea
+                  {/* <Textarea
                     placeholder="title "
                     {...field}
                     autoFocus
@@ -212,7 +213,18 @@ export default function BlogForm({
                       "border-none text-lg font-medium leading-relaxed resized-none h-full",
                       isPreview ? "w-0 p-0" : "w-full lg:w-1/2"
                     )}
+                  /> */}
+                  <Editor
+                    {...field}
+                    onUpdate={(editor) => {
+                      form.setValue("content", editor?.getText() || "");
+                    }}
+                    className={cn(
+                      "border-none text-lg font-medium overflow-y-scroll",
+                      isPreview ? "w-0 p-0" : "w-full lg:w-1/2"
+                    )}
                   />
+
                   <div
                     className={cn(
                       " overflow-y-auto",
