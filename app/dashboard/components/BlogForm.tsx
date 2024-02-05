@@ -18,13 +18,14 @@ import { Input } from "@/components/ui/input";
 import { EyeOpenIcon, Pencil1Icon, RocketIcon } from "@radix-ui/react-icons";
 import { Switch } from "@/components/ui/switch";
 import { BsSave } from "react-icons/bs";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import MarkdownPreview from "@/components/markdown/MarkdownPreview";
 import { BlogFormSchema, BlogFormSchemaType } from "../schema";
 import { IBlogDetail } from "@/lib/types";
 import { Editor } from "novel";
+import { generateHTML } from "@tiptap/html";
 
 export default function BlogForm({
   onHandleSubmit,
@@ -217,23 +218,27 @@ export default function BlogForm({
                   <Editor
                     {...field}
                     onUpdate={(editor) => {
-                      form.setValue("content", editor?.getText() || "");
+                      form.setValue("content", editor?.getHTML() || "");
                     }}
                     className={cn(
-                      "border-none text-lg font-medium overflow-y-scroll",
-                      isPreview ? "w-0 p-0" : "w-full lg:w-1/2"
+                      "border-none text-lg font-medium w-full lg:w-1/2",
+                      isPreview ? "hidden p-0" : "block"
                     )}
                   />
 
                   <div
                     className={cn(
-                      " overflow-y-auto",
-                      isPreview
-                        ? "mx-auto w-full lg:w-4/5 "
-                        : " w-1/2 lg:block hidden "
+                      "overflow-y-auto mx-auto w-full lg:w-4/5 ",
+                      isPreview ? "block" : " w-1/2 lg:block hidden"
                     )}
                   >
-                    <MarkdownPreview content={form.getValues().content} />
+                    {/* <MarkdownPreview content={form.getValues().content} /> */}
+                    <div
+                      className="wysiwyg wysiwyg-slate wysiwyg-invert"
+                      dangerouslySetInnerHTML={{
+                        __html: form.getValues().content,
+                      }}
+                    ></div>
                   </div>
                 </div>
               </FormControl>
