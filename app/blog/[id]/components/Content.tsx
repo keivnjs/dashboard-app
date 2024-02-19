@@ -43,5 +43,12 @@ export default function Content({ blogId }: { blogId: string }) {
     return <BlogContentLoading />;
   }
 
-  return <MarkdownPreview content={blog?.content || ""} />;
+  return (
+    <div
+      className="wysiwyg wysiwyg-slate wysiwyg-invert"
+      dangerouslySetInnerHTML={{
+        __html: blog?.content || "",
+      }}
+    ></div>
+  );
 }
