@@ -247,7 +247,7 @@ export default function BlogForm({
                       isPreview ? "hidden p-0" : "block"
                     )}
                   /> */}
-                  {/* <TailwindEditor /> */}
+
                   <EditorRoot>
                     <EditorContent
                       {...field}
@@ -258,7 +258,7 @@ export default function BlogForm({
                       editorProps={{
                         ...defaultEditorProps,
                         attributes: {
-                          class: `prose-lg prose-stone dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`,
+                          class: `prose-stone dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full wysiwyg wysiwyg-slate wysiwyg-invert`,
                         },
                       }}
                       className={cn(
@@ -266,7 +266,7 @@ export default function BlogForm({
                         isPreview ? "hidden p-0" : "block"
                       )}
                     >
-                      <EditorCommand className="z-50 h-auto max-h-[330px]  w-72 overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all">
+                      <EditorCommand className="z-50 h-auto max-h-[330px] w-72 overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all">
                         <EditorCommandEmpty className="px-2 text-muted-foreground">
                           No results
                         </EditorCommandEmpty>
@@ -319,13 +319,13 @@ export default function BlogForm({
 
                   <div
                     className={cn(
-                      "overflow-y-auto mx-auto w-full lg:w-4/5 ",
+                      "overflow-y-auto mx-auto w-full lg:w-1/2 ",
                       isPreview ? "block" : " w-1/2 lg:block hidden"
                     )}
                   >
                     {/* <MarkdownPreview content={form.getValues().content} /> */}
                     <div
-                      className="wysiwyg wysiwyg-slate wysiwyg-invert"
+                      className="prose-stone dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full wysiwyg wysiwyg-slate wysiwyg-invert"
                       dangerouslySetInnerHTML={{
                         __html: form.getValues().content,
                       }}

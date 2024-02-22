@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/nav/Navbar";
 import Sessionprovider from "@/components/session-provider";
 import { Toaster } from "@/components/ui/toaster";
+import "./prosemirror.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
