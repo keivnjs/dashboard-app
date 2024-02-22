@@ -24,8 +24,25 @@ import { Textarea } from "@/components/ui/textarea";
 import MarkdownPreview from "@/components/markdown/MarkdownPreview";
 import { BlogFormSchema, BlogFormSchemaType } from "../schema";
 import { IBlogDetail } from "@/lib/types";
-import { Editor } from "novel";
 import { generateHTML } from "@tiptap/html";
+import {
+  Editor,
+  EditorBubble,
+  EditorBubbleItem,
+  EditorCommand,
+  EditorCommandEmpty,
+  EditorCommandItem,
+  EditorContent,
+  EditorRoot,
+  defaultEditorProps,
+} from "novel";
+import { defaultExtensions } from "@/components/extensions";
+import { slashCommand, suggestionItems } from "@/components/slash-command";
+import { Separator } from "@/components/ui/separator";
+import { NodeSelector } from "@/components/selectors/node-selector";
+import { LinkSelector } from "@/components/selectors/link-selector";
+import { TextButtons } from "@/components/selectors/text-buttons";
+import { ColorSelector } from "@/components/selectors/color-selector";
 
 export default function BlogForm({
   onHandleSubmit,
@@ -49,6 +66,11 @@ export default function BlogForm({
   function onSubmit(data: z.infer<typeof BlogFormSchema>) {
     onHandleSubmit(data);
   }
+
+  const extensions = [...defaultExtensions, slashCommand];
+  const [openNode, setOpenNode] = useState(false);
+  const [openColor, setOpenColor] = useState(false);
+  const [openLink, setOpenLink] = useState(false);
 
   return (
     <Form {...form}>
@@ -215,7 +237,7 @@ export default function BlogForm({
                       isPreview ? "w-0 p-0" : "w-full lg:w-1/2"
                     )}
                   /> */}
-                  <Editor
+                  {/* <Editor
                     {...field}
                     onUpdate={(editor) => {
                       form.setValue("content", editor?.getHTML() || "");
@@ -224,7 +246,76 @@ export default function BlogForm({
                       "border-none text-lg font-medium w-full lg:w-1/2",
                       isPreview ? "hidden p-0" : "block"
                     )}
-                  />
+                  /> */}
+                  {/* <TailwindEditor /> */}
+                  <EditorRoot>
+                    <EditorContent
+                      {...field}
+                      onUpdate={({ editor }) => {
+                        form.setValue("content", editor.getHTML());
+                      }}
+                      extensions={extensions}
+                      editorProps={{
+                        ...defaultEditorProps,
+                        attributes: {
+                          class: `prose-lg prose-stone dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full`,
+                        },
+                      }}
+                      className={cn(
+                        "border-none text-lg font-medium w-full lg:w-1/2",
+                        isPreview ? "hidden p-0" : "block"
+                      )}
+                    >
+                      <EditorCommand className="z-50 h-auto max-h-[330px]  w-72 overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all">
+                        <EditorCommandEmpty className="px-2 text-muted-foreground">
+                          No results
+                        </EditorCommandEmpty>
+                        {suggestionItems.map((item) => (
+                          <EditorCommandItem
+                            value={item.title}
+                            onCommand={(val) => item.command?.(val)}
+                            className={`flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-accent aria-selected:bg-accent `}
+                            key={item.title}
+                          >
+                            <div className="flex h-10 w-10 items-center justify-center rounded-md border border-muted bg-background">
+                              {item.icon}
+                            </div>
+                            <div>
+                              <p className="font-medium">{item.title}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {item.description}
+                              </p>
+                            </div>
+                          </EditorCommandItem>
+                        ))}
+                      </EditorCommand>
+                      <EditorBubble
+                        tippyOptions={{
+                          placement: "top",
+                        }}
+                        className="flex w-fit max-w-[90vw] overflow-hidden rounded border border-muted bg-red-500 shadow-xl"
+                      >
+                        <Separator orientation="vertical" />
+                        <NodeSelector
+                          open={openNode}
+                          onOpenChange={setOpenNode}
+                        />
+                        <Separator orientation="vertical" />
+
+                        <LinkSelector
+                          open={openLink}
+                          onOpenChange={setOpenLink}
+                        />
+                        <Separator orientation="vertical" />
+                        <TextButtons />
+                        <Separator orientation="vertical" />
+                        <ColorSelector
+                          open={openColor}
+                          onOpenChange={setOpenColor}
+                        />
+                      </EditorBubble>
+                    </EditorContent>
+                  </EditorRoot>
 
                   <div
                     className={cn(
