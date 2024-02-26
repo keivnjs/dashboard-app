@@ -1,3 +1,4 @@
+import { startImageUpload } from "@/lib/actions/image-upload";
 import {
   CheckSquare,
   Code,
@@ -12,7 +13,7 @@ import {
   TextQuote,
 } from "lucide-react";
 import { createSuggestionItems } from "novel/extensions";
-import { startImageUpload } from "novel/plugins";
+// import { startImageUpload } from "novel/plugins";
 import { Command, renderItems } from "novel/extensions";
 
 export const suggestionItems = createSuggestionItems([
@@ -130,6 +131,30 @@ export const suggestionItems = createSuggestionItems([
     command: ({ editor, range }) =>
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
   },
+  // {
+  //   title: "Image",
+  //   description: "Upload an image from your computer.",
+  //   searchTerms: ["photo", "picture", "media"],
+  //   icon: <ImageIcon size={18} />,
+  //   command: ({ editor, range }) => {
+  //     editor.chain().focus().deleteRange(range).run();
+  //     // upload image
+  //     const input = document.createElement("input");
+  //     input.type = "file";
+  //     input.accept = "image/*";
+  //     input.onchange = async () => {
+  //       if (input.files?.length) {
+  //         const file = input.files[0];
+  //         const pos = editor.view.state.selection.from;
+  //         // console.log(file);
+  //         // console.log("input", input);
+  // startImageUpload(file, editor.view, pos);
+  //         // handleImageUpload(file);
+  //       }
+  //     };
+  //     input.click();
+  //   },
+  // },
   {
     title: "Image",
     description: "Upload an image from your computer.",
@@ -137,7 +162,8 @@ export const suggestionItems = createSuggestionItems([
     icon: <ImageIcon size={18} />,
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
-      // upload image
+
+      // Create an input element for file selection
       const input = document.createElement("input");
       input.type = "file";
       input.accept = "image/*";
@@ -145,7 +171,20 @@ export const suggestionItems = createSuggestionItems([
         if (input.files?.length) {
           const file = input.files[0];
           const pos = editor.view.state.selection.from;
-          startImageUpload(file, editor.view, pos);
+
+          // Call startImageUpload to handle image upload
+          startImageUpload(
+            file,
+            (src) => {
+              const node = editor.schema.nodes.image.create({ src });
+              editor.view.dispatch(
+                editor.view.state.tr.replaceRangeWith(pos, pos, node)
+              );
+            },
+            (error) => {
+              console.error("Error uploading image:", error);
+            }
+          );
         }
       };
       input.click();

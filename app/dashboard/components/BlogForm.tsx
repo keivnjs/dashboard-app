@@ -34,7 +34,7 @@ import {
   EditorCommandItem,
   EditorContent,
   EditorRoot,
-  defaultEditorProps,
+  // defaultEditorProps,
 } from "novel";
 import { defaultExtensions } from "@/components/extensions";
 import { slashCommand, suggestionItems } from "@/components/slash-command";
@@ -43,6 +43,7 @@ import { NodeSelector } from "@/components/selectors/node-selector";
 import { LinkSelector } from "@/components/selectors/link-selector";
 import { TextButtons } from "@/components/selectors/text-buttons";
 import { ColorSelector } from "@/components/selectors/color-selector";
+import { defaultEditorProps } from "@/lib/actions/editor-props";
 
 export default function BlogForm({
   onHandleSubmit,
