@@ -1,4 +1,4 @@
-### Dashboard App - Simple Blog
+## Dashboard App - Simple Blog
 
 This is a testing blog application that integrates [Novel](https://novel.sh), a Notion-style WYSIWYG editor.
 
